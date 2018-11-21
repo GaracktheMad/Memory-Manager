@@ -5,7 +5,7 @@ import javafx.scene.layout.BorderPane;
 /**
  * A class that represents a process in memory/memory in use
  * 
- * @author
+ * @author Brandon Ruiz
  *
  */
 public class Process extends MemBlock {

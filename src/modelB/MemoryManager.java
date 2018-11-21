@@ -15,7 +15,7 @@ public class MemoryManager {
 	/**
 	 * The memory array
 	 */
-	private ArrayList<Process> memory;
+	private ArrayList<MemBlock> memory;
 	
 	/**
 	 * The waiting queue
@@ -31,7 +31,7 @@ public class MemoryManager {
 	 * Class constructor
 	 */
 	public MemoryManager() {
-		memory = new ArrayList<Process>();
+		memory = new ArrayList<MemBlock>();
 		waitingQueue = new ArrayList<Process>();
 		diagram = new VBox();
 		/**
@@ -68,8 +68,24 @@ public class MemoryManager {
 	 * 
 	 * @param new process
 	 * @return status of new process + status of waiting queue
+	 * @author Brandon Ruiz
 	 */
 	public String addFirstFit(Process p) {
+		for(MemBlock mb: memory) {
+			if(mb instanceof Process == false) {
+				if (mb.getSize() > p.getSize()) {
+					mb.setSize(mb.getSize() - p.getSize());
+					mb.setAddress(mb.getAddress() + p.getSize());
+					memory.add(memory.indexOf(mb), p);
+					return "Process " + p.getId() + " successfully added to memory";
+				}
+				else if(mb.getSize() == p.getSize()) {
+					mb = p;
+					return "Process " + p.getId() + " successfully added to memory";
+				}
+			}
+		}
+		waitingQueue.add(p);
 		return "";
 	}
 	
@@ -89,9 +105,24 @@ public class MemoryManager {
 	 * 
 	 * @param id of process to remove
 	 * @return status of removal
+	 * @author Brandon Ruiz
 	 */
 	public String remove(String id) {
-		return "";
+		for(MemBlock mb: memory) {
+			if(mb instanceof Process) {
+				if (((Process) mb).getId() == id){
+					mb = new MemBlock(mb.getSize(), mb.getAddress());
+					return "Process " + id + " removed from memory";
+				}
+			}
+		}
+		for(Process p: waitingQueue) {
+			if(p.getId() == id) {
+				waitingQueue.remove(p);
+				return "Process " + id + " removed from waiting queue";
+			}
+		}
+		return "Process " + id + " not found";
 	}
 	
 	/**

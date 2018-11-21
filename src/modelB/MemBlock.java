@@ -5,7 +5,7 @@ import javafx.scene.layout.BorderPane;
 /**
  * A class that represents memory space in RAM
  * 
- * @author
+ * @author Brandon Ruiz
  *
  */
 public class MemBlock {

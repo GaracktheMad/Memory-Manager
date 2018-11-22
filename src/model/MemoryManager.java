@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * The class which holds and manages the simulated memory
  * 
- * @author
+ * @author Brandon Ruiz and Peter Vukas
  *
  */
 public class MemoryManager {
@@ -23,9 +23,10 @@ public class MemoryManager {
 	/**
 	 * Class constructor
 	 */
-	public MemoryManager() {
+	public MemoryManager(int memorySize) {
 		memory = new ArrayList<MemBlock>();
 		waitingQueue = new ArrayList<Process>();
+		memory.add(new EmptySpace(memorySize, 0));
 		/**
 		 * To be added - the initial memory diagram - the initial memory space - the
 		 * assumed size of memory, for all diagram box creation
@@ -36,31 +37,65 @@ public class MemoryManager {
 	 * Attempts to add a new process via best fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param new process
-	 * @return status of new process + status of waiting queue
+	 * @param p new process
+	 * @return True if added to memory, false if on waiting queue
+	 * @author Peter Vukas
 	 */
 	public boolean addBestFit(Process p) {
-		return false;
+		int entryPoint = -1; // Current best fitting position to enter
+		int temp = -1; // Value of the hole that would result from the last best choice
+		int index = -1; // Index of the hole to replace in memory array
+		for (int i = 0; i < memory.size(); i++) {
+			if (memory.get(i) instanceof EmptySpace) {
+				if (memory.get(i).getSize() >= p.getSize()) {
+					if (entryPoint == -1 || temp > memory.get(i).getSize() - p.getSize()) {
+						entryPoint = memory.get(i).getAddress();
+						temp = memory.get(i).getSize() - p.getSize();
+						index = i;
+					}
+				}
+			}
+		}
+		if (index < 0) {
+			waitingQueue.add(p);
+			return false;
+		} else {
+			EmptySpace e = (EmptySpace) memory.get(index);
+			p.setAddress(e.getAddress());
+			if (p.getSize() >= e.getSize()) {
+				memory.remove(e);
+			} else {
+				e.setAddress(p.getAddress() + p.getSize());
+				e.setSize(e.getSize() - p.getSize());
+			}
+			memory.add(p);
+			memory.sort(p);
+			return true;
+		}
 	}
 
 	/**
 	 * Attempts to add a new process via first fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param new process
-	 * @return status of new process + status of waiting queue
-	 * @author Brandon Ruiz
+	 * @param p new process
+	 * @return True if added to memory, false if on waiting queue
+	 * @author Brandon Ruiz and Peter Vukas
 	 */
 	public boolean addFirstFit(Process p) {
 		for (MemBlock mb : memory) {
-			if (mb instanceof Process == false) {
+			if (mb instanceof EmptySpace == true) {
 				if (mb.getSize() > p.getSize()) {
+					p.setAddress(mb.getAddress());
+					mb.setAddress(p.getAddress() + p.getSize());
 					mb.setSize(mb.getSize() - p.getSize());
-					mb.setAddress(mb.getAddress() + p.getSize());
-					memory.add(memory.indexOf(mb), p);
+					memory.add(p);
+					memory.sort(p);
 					return true;
 				} else if (mb.getSize() == p.getSize()) {
-					mb = p;
+					p.setAddress(mb.getAddress());
+					memory.add(p);
+					memory.sort(p);
 					return true;
 				}
 			}
@@ -73,11 +108,40 @@ public class MemoryManager {
 	 * Attempts to add a new process via worst fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param new process
-	 * @return status of new process + status of waiting queue
+	 * @param p new process
+	 * @return True if added to memory, false if on waiting queue
 	 */
 	public boolean addWorstFit(Process p) {
-		return false;
+		int entryPoint = -1; // Current best fitting position to enter
+		int temp = -1; // Value of the hole that would result from the last best choice
+		int index = -1; // Index of the hole to replace in memory array
+		for (int i = 0; i < memory.size(); i++) {
+			if (memory.get(i) instanceof EmptySpace) {
+				if (memory.get(i).getSize() >= p.getSize()) {
+					if (entryPoint == -1 || temp < memory.get(i).getSize() - p.getSize()) {
+						entryPoint = memory.get(i).getAddress();
+						temp = memory.get(i).getSize() - p.getSize();
+						index = i;
+					}
+				}
+			}
+		}
+		if (index < 0) {
+			waitingQueue.add(p);
+			return false;
+		} else {
+			EmptySpace e = (EmptySpace) memory.get(index);
+			p.setAddress(e.getAddress());
+			if (p.getSize() >= e.getSize()) {
+				memory.remove(e);
+			} else {
+				e.setAddress(p.getAddress() + p.getSize());
+				e.setSize(e.getSize() - p.getSize());
+			}
+			memory.add(p);
+			memory.sort(p);
+			return true;
+		}
 	}
 
 	/**
@@ -88,13 +152,16 @@ public class MemoryManager {
 	 * @author Brandon Ruiz and Peter Vukas
 	 */
 	public boolean remove(String id) {
-		for (MemBlock mb : memory) {
-			if (mb.getId().equals(id)) {
-				memory.remove(mb);
-				return true;
+		if (id.substring(0, 1).equals("P")) {
+			for (MemBlock mb : memory) {
+				if (mb.getId().equals(id)) {
+					EmptySpace e = new EmptySpace(mb.getSize(), mb.getAddress());
+					memory.remove(mb);
+					memory.add(e);
+					memory.sort(e);
+					return true;
+				}
 			}
-		}
-		if (id.substring(0, 1).equals("A")) {
 			for (Process p : waitingQueue) {
 				if (p.getId() == id) {
 					waitingQueue.remove(p);
@@ -111,6 +178,7 @@ public class MemoryManager {
 	 * @return compaction message + status of waiting queue
 	 */
 	public boolean compactAddQueue() {
+		// TODO create algorithm
 		return false;
 	}
 

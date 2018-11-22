@@ -1,12 +1,14 @@
 package model;
 
+import java.util.Comparator;
+
 /**
  * A class that represents memory space in RAM
  * 
  * @author Brandon Ruiz
  *
  */
-public abstract class MemBlock {
+public abstract class MemBlock implements Comparator<MemBlock> {
 	protected int idCounter = 0;
 
 	/**
@@ -36,7 +38,7 @@ public abstract class MemBlock {
 	/**
 	 * Size setter
 	 * 
-	 * @param new size
+	 * @param size new size
 	 */
 	public void setSize(int size) {
 		this.size = size;
@@ -54,7 +56,7 @@ public abstract class MemBlock {
 	/**
 	 * Address setter
 	 * 
-	 * @param new address
+	 * @param size new address
 	 */
 	public void setAddress(int address) {
 		this.address = address;
@@ -74,8 +76,21 @@ public abstract class MemBlock {
 	 * created in the MemoryManager
 	 * 
 	 * @return Comma delimited string representing all the data needed to create a
-	 *         diagram
+	 *         diagram. Order is as follows: ID, Address, Size
 	 */
-	public abstract String getDiagramData();
+	public String getDiagramData() {
+		return String.format("%s,%8d,%8d", id, address, size);
+	}
+
+	@Override
+	public int compare(MemBlock arg0, MemBlock arg1) {
+		if (arg0.address < arg1.address) {
+			return -1;
+		} else if (arg0.address > arg1.address) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 
 }

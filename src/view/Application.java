@@ -6,6 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.MemoryManager;
 
+/**
+ * @author Brandon Ruiz
+ *
+ */
 public class Application {
 	
 	/**

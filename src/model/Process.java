@@ -12,18 +12,9 @@ public class Process extends MemBlock {
 	 * 
 	 * @param size
 	 * @param address
-	 * @param id
 	 */
-	public Process(int size, int address) {
+	public Process(int size) {
 		this.size = size;
-		this.address = address;
 		id = String.format("P%d", idCounter++);
 	}
-
-	@Override
-	public String getDiagramData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

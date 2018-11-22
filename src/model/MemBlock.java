@@ -1,6 +1,4 @@
-package modelB;
-
-import javafx.scene.layout.BorderPane;
+package model;
 
 /**
  * A class that represents memory space in RAM
@@ -8,29 +6,24 @@ import javafx.scene.layout.BorderPane;
  * @author Brandon Ruiz
  *
  */
-public class MemBlock {
-	
+public abstract class MemBlock {
+	protected int idCounter = 0;
+
+	/**
+	 * The unchanging id of a process
+	 */
+	protected String id;
+
 	/**
 	 * Size in memory
 	 */
-	private int size;
-	
+	protected int size;
+
 	/**
 	 * Address in memory
 	 */
-	private int address;
+	protected int address;
 
-	/**
-	 * Class constructor
-	 * 
-	 * @param size
-	 * @param address
-	 */
-	public MemBlock(int size, int address) {
-		this.size = size;
-		this.address = address;
-	}
-	
 	/**
 	 * Size getter
 	 * 
@@ -66,15 +59,23 @@ public class MemBlock {
 	public void setAddress(int address) {
 		this.address = address;
 	}
-	
+
 	/**
-	 * Create a box representing this memory space
-	 * To be used in the output diagram created in the MemoryManager
+	 * id getter
 	 * 
-	 * @return pictoral representation
+	 * @return id
 	 */
-	public BorderPane getDiagramBox() {
-		return new BorderPane();
+	public String getId() {
+		return id;
 	}
-	
+
+	/**
+	 * Create a box representing this memory space To be used in the output diagram
+	 * created in the MemoryManager
+	 * 
+	 * @return Comma delimited string representing all the data needed to create a
+	 *         diagram
+	 */
+	public abstract String getDiagramData();
+
 }

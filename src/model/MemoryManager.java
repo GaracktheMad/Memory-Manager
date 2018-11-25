@@ -18,14 +18,14 @@ public class MemoryManager {
 	/**
 	 * The waiting queue
 	 */
-	private ArrayList<Process> waitingQueue;
+	private ArrayList<Process> waitingQueue; //TODO Determine if waiting queue is necessary
 
 	/**
 	 * Class constructor
 	 */
 	public MemoryManager(int memorySize) {
 		memory = new ArrayList<MemBlock>();
-		waitingQueue = new ArrayList<Process>();
+		waitingQueue = new ArrayList<Process>(); 
 		memory.add(new EmptySpace(memorySize, 0));
 		/**
 		 * To be added - the initial memory diagram - the initial memory space - the

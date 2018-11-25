@@ -6,25 +6,28 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.MemoryManager;
 import view.MemoryManagerPane;
 
 /**
- * @author 
+ * @author
  *
  */
 public class ViewController extends Application {
 	MemoryManagerPane mmp;
+	MemoryManager mm;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader f = new FXMLLoader(getClass().getResource("/Memory Manager/src/view/Manager.fxml"));
-		MemoryManagerPane mmp = f.getController(); 
+		MemoryManagerPane mmp = f.getController();
 		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove());
 		Scene scene = new Scene(mmp);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		mm = new MemoryManager(2000000);
+		mmp.refreshMemoryDisplay(mm.exportData());
 	}
-
 
 	/**
 	 * @author
@@ -40,7 +43,7 @@ public class ViewController extends Application {
 	}
 
 	/**
-	 * @author 
+	 * @author
 	 *
 	 */
 	public class HandleCompact implements EventHandler<ActionEvent> {
@@ -54,7 +57,7 @@ public class ViewController extends Application {
 	}
 
 	/**
-	 * @author 
+	 * @author
 	 *
 	 */
 	public class HandleRemove implements EventHandler<ActionEvent> {

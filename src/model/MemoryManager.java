@@ -2,14 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-
 /**
  * The class which holds and manages the simulated memory
  * 
@@ -45,8 +37,7 @@ public class MemoryManager {
 	 * Attempts to add a new process via best fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param p
-	 *            new process
+	 * @param p new process
 	 * @return True if added to memory, false if on waiting queue
 	 * @author Peter Vukas
 	 */
@@ -87,8 +78,7 @@ public class MemoryManager {
 	 * Attempts to add a new process via first fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param p
-	 *            new process
+	 * @param p new process
 	 * @return True if added to memory, false if on waiting queue
 	 * @author Brandon Ruiz and Peter Vukas
 	 */
@@ -118,8 +108,7 @@ public class MemoryManager {
 	 * Attempts to add a new process via worst fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param p
-	 *            new process
+	 * @param p new process
 	 * @return True if added to memory, false if on waiting queue
 	 */
 	public boolean addWorstFit(Process p) {
@@ -158,8 +147,7 @@ public class MemoryManager {
 	/**
 	 * Removes process from memory or the waiting queue based on id
 	 * 
-	 * @param id
-	 *            of process to remove
+	 * @param id of process to remove
 	 * @return status of removal
 	 * @author Brandon Ruiz and Peter Vukas
 	 */
@@ -192,32 +180,6 @@ public class MemoryManager {
 	public boolean compactAddQueue() {
 		// TODO create algorithm
 		return false;
-	}
-
-	public VBox diagram() {
-		VBox vb = new VBox();
-		for (MemBlock mb : memory) {
-			String s = mb.getDiagramData();
-			String[] tokens = s.split(",");
-			BorderPane bp = new BorderPane();
-			StackPane sp = new StackPane();
-			Rectangle visual = new Rectangle();
-			visual.setWidth(20);
-			visual.setHeight(Integer.parseInt(tokens[2]));
-			visual.setStroke(Color.BLACK);
-			if (tokens[0] != "Empty Space") {
-				visual.setFill(Color.SILVER);
-				sp.getChildren().addAll(visual, new Text(tokens[0]));
-			} else {
-				visual.setFill(null);
-				sp.getChildren().add(visual);
-			}
-			bp.setCenter(sp);
-			Text address = new Text(tokens[0]);
-			bp.setTop(address);
-			BorderPane.setAlignment(address, Pos.TOP_LEFT);
-		}
-		return vb;
 	}
 
 }

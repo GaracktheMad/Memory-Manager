@@ -108,6 +108,7 @@ public class MemoryManager {
 	 * Attempts to add a new process via worst fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
+	 * @author Peter Vukas
 	 * @param p new process
 	 * @return True if added to memory, false if on waiting queue
 	 */
@@ -175,11 +176,39 @@ public class MemoryManager {
 	/**
 	 * Compacts empty space Attempts to add processes from waiting queue
 	 * 
-	 * @return compaction message + status of waiting queue
+	 * @author Peter Vukas
 	 */
-	public boolean compactAddQueue() {
-		// TODO create algorithm
-		return false;
+	public void compactAddQueue() {
+		for (int i = 0; i < memory.size(); i++) {
+			if (i + 1 < memory.size()) {
+				if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof EmptySpace) {
+					memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize()); // Combines 2 separate
+																									// Empty Spaces into
+																									// 1
+					memory.remove(i + 1);
+					--i;
+				} else if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof Process) {
+					int temp; // Swaps the location of a Process and Empty Space, forcing empty space further
+								// down the list.
+					temp = memory.get(i).getAddress();
+					memory.get(i).setAddress(memory.get(i + 1).getAddress());
+					memory.get(i + 1).setAddress(temp);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @author Peter Vukas
+	 * @return ArrayList of all objects in memory, whether they be processes or
+	 *         empty space
+	 */
+	public ArrayList<String> exportData() {
+		ArrayList<String> exporter = new ArrayList<String>();
+		for (MemBlock mb : memory) {
+			exporter.add(mb.getDiagramData());
+		}
+		return exporter;
 	}
 
 }

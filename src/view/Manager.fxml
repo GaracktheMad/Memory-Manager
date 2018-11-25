@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="449.0" prefWidth="401.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="425.0" prefWidth="439.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <right>
-      <VBox prefHeight="432.0" prefWidth="229.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="410.0" prefWidth="229.0" BorderPane.alignment="CENTER" />
    </right>
    <center>
       <VBox prefHeight="200.0" prefWidth="299.0" spacing="10.0" BorderPane.alignment="CENTER">

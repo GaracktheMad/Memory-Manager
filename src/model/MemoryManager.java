@@ -45,7 +45,8 @@ public class MemoryManager {
 	 * Attempts to add a new process via best fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param p new process
+	 * @param p
+	 *            new process
 	 * @return True if added to memory, false if on waiting queue
 	 * @author Peter Vukas
 	 */
@@ -86,7 +87,8 @@ public class MemoryManager {
 	 * Attempts to add a new process via first fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param p new process
+	 * @param p
+	 *            new process
 	 * @return True if added to memory, false if on waiting queue
 	 * @author Brandon Ruiz and Peter Vukas
 	 */
@@ -116,7 +118,8 @@ public class MemoryManager {
 	 * Attempts to add a new process via worst fit algorithm Adds to the waiting
 	 * queue if necessary
 	 * 
-	 * @param p new process
+	 * @param p
+	 *            new process
 	 * @return True if added to memory, false if on waiting queue
 	 */
 	public boolean addWorstFit(Process p) {
@@ -155,7 +158,8 @@ public class MemoryManager {
 	/**
 	 * Removes process from memory or the waiting queue based on id
 	 * 
-	 * @param id of process to remove
+	 * @param id
+	 *            of process to remove
 	 * @return status of removal
 	 * @author Brandon Ruiz and Peter Vukas
 	 */
@@ -189,10 +193,10 @@ public class MemoryManager {
 		// TODO create algorithm
 		return false;
 	}
-	
+
 	public VBox diagram() {
 		VBox vb = new VBox();
-		for(MemBlock mb: memory) {
+		for (MemBlock mb : memory) {
 			String s = mb.getDiagramData();
 			String[] tokens = s.split(",");
 			BorderPane bp = new BorderPane();
@@ -201,11 +205,10 @@ public class MemoryManager {
 			visual.setWidth(20);
 			visual.setHeight(Integer.parseInt(tokens[2]));
 			visual.setStroke(Color.BLACK);
-			if(tokens[0] != "Empty Space") {
+			if (tokens[0] != "Empty Space") {
 				visual.setFill(Color.SILVER);
 				sp.getChildren().addAll(visual, new Text(tokens[0]));
-			}
-			else {
+			} else {
 				visual.setFill(null);
 				sp.getChildren().add(visual);
 			}

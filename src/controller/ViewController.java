@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class ViewController extends Application{
+public class ViewController extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -17,39 +17,39 @@ public class ViewController extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
+
 	public static void main(String[] args) {
 		Application.launch(controller.ViewController.class, args);
 	}
-	
-	public class HandleRun implements EventHandler<ActionEvent>{
+
+	public class HandleRun implements EventHandler<ActionEvent> {
 
 		@Override
 		public void handle(ActionEvent event) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
-	public class HandleCompact implements EventHandler<ActionEvent>{
+
+	public class HandleCompact implements EventHandler<ActionEvent> {
 
 		@Override
 		public void handle(ActionEvent event) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
-	public class HandleRemove implements EventHandler<ActionEvent>{
+
+	public class HandleRemove implements EventHandler<ActionEvent> {
 
 		@Override
 		public void handle(ActionEvent event) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 
 }

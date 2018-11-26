@@ -23,7 +23,7 @@ public class ViewController extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader f = new FXMLLoader(getClass().getResource("/Memory Manager/src/view/Manager.fxml"));
+		FXMLLoader f = MemoryManagerPane.constructable();
 		MemoryManagerPane mmp = f.getController();
 		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove(), new HandleProcessSelected());
 		Scene scene = new Scene(mmp);
@@ -60,30 +60,39 @@ public class ViewController extends Application {
 		@Override
 		public void handle(ActionEvent event) {
 			boolean hasNoError = false;
-			String errorMessage = "Invalid Process Size";
-			if (mmp.getProcessSize() >= 0) {
-				Process p = findProcess(mmp.selectedProcess());
-				if (p != null) {
-					if (p.isInMemory() == true) {
-						hasNoError = false;
-						errorMessage = "Process is already in memory";
-					} else {
-						if (mmp.selectedAlgorithm().equals("First Fit")) {
-							hasNoError = mm.addFirstFit(p);
-						} else if (mmp.selectedAlgorithm().equals("Best Fit")) {
-							hasNoError = mm.addBestFit(p);
-						} else if (mmp.selectedAlgorithm().equals("Worst Fit")) {
-							hasNoError = mm.addWorstFit(p);
-						} else {
+			String errorMessage = "Unknown Error";
+			try {
+				if (mmp.getProcessSize() >= 0) {
+					Process p = findProcess(mmp.selectedProcess());
+					if (p != null) {
+						if (p.isInMemory() == true) {
 							hasNoError = false;
-							errorMessage = "No Algorithm is currently selected";
+							errorMessage = "Process is already in memory";
+						} else {
+							if (mmp.selectedAlgorithm().equals("First Fit")) {
+								hasNoError = mm.addFirstFit(p);
+								errorMessage = "This process is too large to be added to memory.\nIt has been added to the waiting queue";
+							} else if (mmp.selectedAlgorithm().equals("Best Fit")) {
+								hasNoError = mm.addBestFit(p);
+								errorMessage = "This process is too large to be added to memory.\nIt has been added to the waiting queue";
+							} else if (mmp.selectedAlgorithm().equals("Worst Fit")) {
+								hasNoError = mm.addWorstFit(p);
+							} else {
+								hasNoError = false;
+								errorMessage = "This process is too large to be added to memory.\nIt has been added to the waiting queue";
+								errorMessage = "No Algorithm is currently selected";
+							}
 						}
 					}
 				}
+			} catch (NumberFormatException e) {
+				hasNoError = false;
+				errorMessage = "Invalid Process Size";
 			}
 			if (hasNoError == false) {
-				// TODO Display Error Message
+				mmp.setAlert(errorMessage);
 			} else {
+				mmp.hideAlert();
 				mmp.refreshMemoryDisplay(mm.exportData());
 			}
 		}
@@ -118,10 +127,13 @@ public class ViewController extends Application {
 		public void handle(ActionEvent event) {
 			Process p = findProcess(mmp.selectedProcess());
 			if (p != null && p.isInMemory() == true) {
-				// boolean status = // TODO: If needed, add a warning message if the process was
-				// removed successfully or not.
-				mm.remove(p.getId());
-				mmp.refreshMemoryDisplay(mm.exportData());
+				boolean success = mm.remove(p.getId());
+				if (success == false) {
+					mmp.setAlert("This Process isn't In Memory Yet");
+				} else {
+					mmp.hideAlert();
+					mmp.refreshMemoryDisplay(mm.exportData());
+				}
 			}
 		}
 

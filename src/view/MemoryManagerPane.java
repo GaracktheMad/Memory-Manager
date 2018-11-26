@@ -2,14 +2,13 @@ package view;
 
 import java.util.ArrayList;
 
-import controller.ViewController.HandleCompact;
-import controller.ViewController.HandleRemove;
-import controller.ViewController.HandleRun;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -35,6 +34,17 @@ public class MemoryManagerPane extends BorderPane {
 	private Button removeBtn;
 	@FXML
 	private TextField sizeBox;
+	@FXML
+	private Label statusLbl;
+
+	/**
+	 * Creates an FXML loader of the Manager.FXML
+	 * 
+	 * @return The created loader
+	 */
+	public static FXMLLoader constructable() {
+		return new FXMLLoader(MemoryManagerPane.class.getResource("Manager.fxml"));
+	}
 
 	@FXML
 	void initialize() {
@@ -49,6 +59,23 @@ public class MemoryManagerPane extends BorderPane {
 		algorithmCmbBox.getItems().add("Best Fit");
 		algorithmCmbBox.getItems().add("Worst Fit");
 		populateProcessList(10);
+	}
+
+	/**
+	 * Makes the alert label invisible. Does not wipe current data.
+	 */
+	public void hideAlert() {
+		statusLbl.setVisible(false);
+	}
+
+	/**
+	 * Reveals a message on the screen in bold underlined red to the user
+	 * 
+	 * @param message String to be displayed
+	 */
+	public void setAlert(String message) {
+		statusLbl.setVisible(true);
+		statusLbl.setText(message);
 	}
 
 	/**
@@ -137,19 +164,11 @@ public class MemoryManagerPane extends BorderPane {
 		return pcmbBox.getItems().size();
 	}
 
-	/**
-	 * Gets the desired size of the Process. If the value the user entered is not an
-	 * integer, a -1 will be returned and the user will be informed. If the user
-	 * enters a negative number, the absolute value will be used instead.
-	 * 
-	 * @return The size the user specified they wanted.
+	/** Gets the value in the process size box
+	 * @return Absolute value of the size in the box
+	 * @throws NumberFormatException Thrown if an invalid value is given
 	 */
-	public int getProcessSize() {
-		try {
+	public int getProcessSize() throws NumberFormatException{
 			return Math.abs(Integer.valueOf(sizeBox.getText()));
-		} catch (NumberFormatException e) {
-			// TODO Error Box logic
-			return -1;
-		}
 	}
 }

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="425.0" prefWidth="439.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MemoryManagerPane">
    <right>
@@ -48,6 +49,9 @@
       </VBox>
    </center>
    <bottom>
-      <Label text="Status Label" BorderPane.alignment="CENTER" />
+      <Label fx:id="statusLbl" contentDisplay="CENTER" text="Status" textAlignment="CENTER" textFill="RED" underline="true" visible="false" wrapText="true" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="18.0" />
+         </font></Label>
    </bottom>
 </BorderPane>

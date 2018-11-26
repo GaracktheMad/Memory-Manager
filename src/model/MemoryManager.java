@@ -70,6 +70,7 @@ public class MemoryManager {
 			}
 			memory.add(p);
 			memory.sort(p);
+			p.inMemory = true;
 			return true;
 		}
 	}
@@ -91,11 +92,13 @@ public class MemoryManager {
 					mb.setSize(mb.getSize() - p.getSize());
 					memory.add(p);
 					memory.sort(p);
+					p.inMemory = true;
 					return true;
 				} else if (mb.getSize() == p.getSize()) {
 					p.setAddress(mb.getAddress());
 					memory.add(p);
 					memory.sort(p);
+					p.inMemory = true;
 					return true;
 				}
 			}
@@ -141,6 +144,7 @@ public class MemoryManager {
 			}
 			memory.add(p);
 			memory.sort(p);
+			p.inMemory = true;
 			return true;
 		}
 	}
@@ -160,6 +164,8 @@ public class MemoryManager {
 					memory.remove(mb);
 					memory.add(e);
 					memory.sort(e);
+					Process p = (Process) mb;
+					p.inMemory = false;
 					return true;
 				}
 			}

@@ -28,7 +28,7 @@
                   <ComboBox fx:id="pcmbBox" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="80.0" />
                </children>
             </HBox>
-            <TextField maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" promptText="Enter Process Size Numerically">
+            <TextField fx:id="sizeBox" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="175.0" promptText="Enter Process Size Numerically">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

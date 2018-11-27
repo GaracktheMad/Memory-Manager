@@ -12,7 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 /**
  * @author Peter Vukas
@@ -114,10 +116,22 @@ public class MemoryManagerPane extends BorderPane {
 	 * @param datum String of data to be contained in this memory block. The format
 	 *              is comma delimited in the order: "Name,StartAddress,Size"
 	 * @return Formatted rectangle
+	 * @author Brandon Ruiz
 	 */
 	private Rectangle memoryBlock(String datum) {
 		Rectangle rectangle = new Rectangle();
-		// TODO Logic to add the string data into the rectangle
+		// TODO reformat this code, and possibly change the return type to a border
+		// pane, to work correctly
+		/*
+		 * String[] tokens = datum.split(","); BorderPane bp = new BorderPane();
+		 * rectangle.setWidth(20); rectangle.setHeight(Integer.parseInt(tokens[2]));
+		 * rectangle.setStroke(Color.BLACK); if (tokens[0] != "Empty Space") {
+		 * rectangle.setFill(Color.SILVER); bp.getChildren().addAll(rectangle, new
+		 * Text(tokens[0])); } else { rectangle.setFill(null);
+		 * sp.getChildren().add(rectangle); } bp.setCenter(sp); Text address = new
+		 * Text(tokens[0]); bp.setTop(address); BorderPane.setAlignment(address,
+		 * Pos.TOP_LEFT);
+		 */
 		return rectangle;
 	}
 
@@ -164,11 +178,13 @@ public class MemoryManagerPane extends BorderPane {
 		return pcmbBox.getItems().size();
 	}
 
-	/** Gets the value in the process size box
+	/**
+	 * Gets the value in the process size box
+	 * 
 	 * @return Absolute value of the size in the box
 	 * @throws NumberFormatException Thrown if an invalid value is given
 	 */
-	public int getProcessSize() throws NumberFormatException{
-			return Math.abs(Integer.valueOf(sizeBox.getText()));
+	public int getProcessSize() throws NumberFormatException {
+		return Math.abs(Integer.valueOf(sizeBox.getText()));
 	}
 }

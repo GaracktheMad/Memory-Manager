@@ -58,7 +58,7 @@ public class ViewController extends Application {
 	public class HandleRun implements EventHandler<ActionEvent> {
 
 		@Override
-		public void handle(ActionEvent event) {
+		public void handle(ActionEvent event) {// TODO Add logic for the waiting queue
 			boolean hasNoError = false;
 			String errorMessage = "Unknown Error";
 			try {
@@ -147,7 +147,8 @@ public class ViewController extends Application {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Populate the size
+			// TODO Populate the size, Toggle Add/Remove buttons based on whether this is in
+			// memory
 
 		}
 

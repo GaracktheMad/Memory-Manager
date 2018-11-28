@@ -81,6 +81,10 @@ public abstract class MemBlock implements Comparator<MemBlock> {
 	public String getDiagramData() {
 		return String.format("%s,%8d,%8d", id, address, size);
 	}
+	
+	public String getWaitingQueueData() {
+		return String.format("%s,%8d", id, size);
+	}
 
 	@Override
 	public int compare(MemBlock arg0, MemBlock arg1) {

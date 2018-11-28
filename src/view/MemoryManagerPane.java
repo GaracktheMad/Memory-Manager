@@ -40,6 +40,8 @@ public class MemoryManagerPane extends BorderPane {
 	private TextField sizeBox;
 	@FXML
 	private Label statusLbl;
+	@FXML
+	private VBox waitList;
 
 	/**
 	 * Creates an FXML loader of the Manager.FXML
@@ -58,7 +60,8 @@ public class MemoryManagerPane extends BorderPane {
 		assert addBtn != null : "fx:id=\"addBtn\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert compactionBtn != null : "fx:id=\"compactionBtn\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert removeBtn != null : "fx:id=\"removeBtn\" was not injected: check your FXML file 'Manager.fxml'.";
-
+		assert waitList != null : "fx:id=\"waitList\" was not injected: check your FXML file 'Manager.fxml'.";
+		
 		algorithmCmbBox.getItems().add("First Fit");
 		algorithmCmbBox.getItems().add("Best Fit");
 		algorithmCmbBox.getItems().add("Worst Fit");
@@ -163,7 +166,19 @@ public class MemoryManagerPane extends BorderPane {
 			memVBox.getChildren().add(memoryBlock(s));
 		}
 	}
-
+	
+	/**
+	 * Create waiting queue visuals
+	 */
+	
+	public void setWaitingQueue(ArrayList<String> processes) {
+		waitList.getChildren().clear();
+		waitList.getChildren().add(new Label("Waiting Queue"));
+		for(String s : processes) {
+			waitList.getChildren().add(new Label(s));
+		}
+	}
+ 
 	/**
 	 * @param datum String of data to be contained in this memory block. The format
 	 *              is comma delimited in the order: "Name,StartAddress,Size"

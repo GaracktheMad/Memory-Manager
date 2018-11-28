@@ -209,12 +209,27 @@ public class MemoryManager {
 	 * @return ArrayList of all objects in memory, whether they be processes or
 	 *         empty space
 	 */
-	public ArrayList<String> exportData() {
+	public ArrayList<String> exportDiagramData() {
 		ArrayList<String> exporter = new ArrayList<String>();
 		for (MemBlock mb : memory) {
 			exporter.add(mb.getDiagramData());
 		}
 		return exporter;
+	}
+	
+	/**
+	 * Exports list of data for the waiting queue
+	 * 
+	 * @return String ArrayList of the name and id of all processes in the 
+	 * waiting queue
+	 * @author Brandon Ruiz
+	 */
+	public ArrayList<String> exportWaitingQueueData() {
+		ArrayList<String> waitingInfo = new ArrayList<String>();
+		for(Process p : waitingQueue) {
+			waitingInfo.add(p.getWaitingQueueData());
+		}
+		return waitingInfo;
 	}
 
 }

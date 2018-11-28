@@ -31,7 +31,8 @@ public class ViewController extends Application {
 		primaryStage.show();
 
 		mm = new MemoryManager(2000000);
-		mmp.refreshMemoryDisplay(mm.exportData());
+		mmp.refreshMemoryDisplay(mm.exportDiagramData());
+		mmp.setWaitingQueue(mm.exportWaitingQueueData());
 
 		availableProcesses = new ArrayList<Process>();
 		for (int i = 0; i < mmp.numberOfProcesses(); i++) {
@@ -93,7 +94,8 @@ public class ViewController extends Application {
 				mmp.setAlert(errorMessage);
 			} else {
 				mmp.hideAlert();
-				mmp.refreshMemoryDisplay(mm.exportData());
+				mmp.refreshMemoryDisplay(mm.exportDiagramData());
+				mmp.setWaitingQueue(mm.exportWaitingQueueData());
 			}
 		}
 
@@ -110,7 +112,8 @@ public class ViewController extends Application {
 		@Override
 		public void handle(ActionEvent event) {
 			mm.compactAddQueue();
-			mmp.refreshMemoryDisplay(mm.exportData());
+			mmp.refreshMemoryDisplay(mm.exportDiagramData());
+			mmp.setWaitingQueue(mm.exportWaitingQueueData());
 		}
 
 	}
@@ -132,7 +135,8 @@ public class ViewController extends Application {
 					mmp.setAlert("This Process isn't In Memory Yet");
 				} else {
 					mmp.hideAlert();
-					mmp.refreshMemoryDisplay(mm.exportData());
+					mmp.refreshMemoryDisplay(mm.exportDiagramData());
+					mmp.setWaitingQueue(mm.exportWaitingQueueData());
 				}
 			}
 		}

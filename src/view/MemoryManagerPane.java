@@ -6,13 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 /**
  * @author Peter Vukas
@@ -166,21 +170,27 @@ public class MemoryManagerPane extends BorderPane {
 	 * @return Formatted rectangle
 	 * @author Brandon Ruiz
 	 */
-	private Rectangle memoryBlock(String datum) {
-		Rectangle rectangle = new Rectangle();
-		// TODO reformat this code, and possibly change the return type to a border
-		// pane, to work correctly
-		/*
-		 * String[] tokens = datum.split(","); BorderPane bp = new BorderPane();
-		 * rectangle.setWidth(20); rectangle.setHeight(Integer.parseInt(tokens[2]));
-		 * rectangle.setStroke(Color.BLACK); if (tokens[0] != "Empty Space") {
-		 * rectangle.setFill(Color.SILVER); bp.getChildren().addAll(rectangle, new
-		 * Text(tokens[0])); } else { rectangle.setFill(null);
-		 * sp.getChildren().add(rectangle); } bp.setCenter(sp); Text address = new
-		 * Text(tokens[0]); bp.setTop(address); BorderPane.setAlignment(address,
-		 * Pos.TOP_LEFT);
-		 */
-		return rectangle;
+	private BorderPane memoryBlock(String datum) {
+		String[] tokens = datum.split(",");
+		BorderPane bp = new BorderPane();
+		StackPane sp = new StackPane();
+		Rectangle visual = new Rectangle();
+		visual.setWidth(20);
+		visual.setHeight(Integer.parseInt(tokens[2]));
+		visual.setStroke(Color.BLACK);
+		if(tokens[0] != "Empty Space") {
+			visual.setFill(Color.SILVER);
+			sp.getChildren().addAll(visual, new Text(tokens[0]));
+		}
+		else {
+			visual.setFill(null);
+			sp.getChildren().add(visual);
+		}
+		bp.setCenter(sp);
+		Text address = new Text(tokens[0]);
+		bp.setTop(address);
+		BorderPane.setAlignment(address, Pos.TOP_LEFT);
+		return bp;
 	}
 
 	/**

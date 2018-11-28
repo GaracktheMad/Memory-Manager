@@ -49,7 +49,7 @@
       </VBox>
    </center>
    <bottom>
-      <Label fx:id="statusLbl" contentDisplay="CENTER" text="Status" textAlignment="CENTER" textFill="RED" underline="true" visible="false" wrapText="true" BorderPane.alignment="CENTER">
+      <Label fx:id="statusLbl" contentDisplay="CENTER" prefHeight="22.0" prefWidth="446.0" text="Status" textAlignment="CENTER" textFill="RED" underline="true" visible="false" wrapText="true" BorderPane.alignment="CENTER">
          <font>
             <Font name="Arial Bold" size="18.0" />
          </font></Label>

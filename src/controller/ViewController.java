@@ -140,6 +140,9 @@ public class ViewController extends Application {
 	}
 
 	/**
+	 * Dynamically disables and enables the add/remove buttons and populates the
+	 * size text field based on whether the currently selected process is in memory
+	 * 
 	 * @author Peter Vukas
 	 *
 	 */
@@ -147,9 +150,16 @@ public class ViewController extends Application {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Populate the size, Toggle Add/Remove buttons based on whether this is in
-			// memory
-
+			Process working = findProcess(mmp.selectedProcess());
+			if (working.isInMemory() == false) {
+				mmp.setDisableAddBtn(false);
+				mmp.setDisableRemoveBtn(true);
+				mmp.setSizeText(null);
+			} else {
+				mmp.setDisableAddBtn(true);
+				mmp.setDisableRemoveBtn(false);
+				mmp.setSizeText(String.valueOf(working.getSize()));
+			}
 		}
 
 	}

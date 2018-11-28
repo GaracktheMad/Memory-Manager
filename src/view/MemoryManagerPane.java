@@ -12,9 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 /**
  * @author Peter Vukas
@@ -78,6 +76,56 @@ public class MemoryManagerPane extends BorderPane {
 	public void setAlert(String message) {
 		statusLbl.setVisible(true);
 		statusLbl.setText(message);
+	}
+
+	/**
+	 * Disables or enables the add button
+	 * 
+	 * @param isDisable If true, the button will be disabled
+	 */
+	public void setDisableAddBtn(boolean isDisable) {
+		addBtn.setDisable(isDisable);
+	}
+
+	/**
+	 * Set the text to be displayed in the size box.
+	 * 
+	 * @param size The text to be displayed. If this value is null, the box will be
+	 *             cleared.
+	 */
+	public void setSizeText(String size) {
+		if (size == null) {
+			sizeBox.clear();
+		} else {
+			sizeBox.setText(size);
+		}
+	}
+
+	/**
+	 * Disables or enables the remove button
+	 * 
+	 * @param isDisable If true, the button will be disabled
+	 */
+	public void setDisableRemoveBtn(boolean isDisable) {
+		removeBtn.setDisable(isDisable);
+	}
+
+	/**
+	 * Gets the disabled state of the add button
+	 * 
+	 * @return True if the button is disabled
+	 */
+	public boolean addIsDisable() {
+		return addBtn.isDisable();
+	}
+
+	/**
+	 * Gets the disabled state of the remove button
+	 * 
+	 * @return True if the button is disabled
+	 */
+	public boolean removeIsDisable() {
+		return removeBtn.isDisable();
 	}
 
 	/**

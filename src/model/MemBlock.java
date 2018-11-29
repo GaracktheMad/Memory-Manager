@@ -9,7 +9,7 @@ import java.util.Comparator;
  *
  */
 public abstract class MemBlock implements Comparator<MemBlock> {
-	protected int idCounter = 0;
+	protected static int idCounter = 0;
 
 	/**
 	 * The unchanging id of a process
@@ -72,18 +72,23 @@ public abstract class MemBlock implements Comparator<MemBlock> {
 	}
 
 	/**
-	 * Create a box representing this memory space To be used in the output diagram
+	 * Create a String representing this memory space. To be used in the output diagram
 	 * created in the MemoryManager
 	 * 
 	 * @return Comma delimited string representing all the data needed to create a
 	 *         diagram. Order is as follows: ID, Address, Size
 	 */
 	public String getDiagramData() {
-		return String.format("%s,%8d,%8d", id, address, size);
+		return String.format("%s,%d,%d", id, address, size);
 	}
 	
+	/*** Create a String representing this memory space. To be used in the output diagram
+	 * created in the MemoryManager's Waiting Queue.
+	 * @return Comma delimited string representing all the data needed to create a
+	 *         waiting queue element. Order is as follows: ID, Size
+	 */
 	public String getWaitingQueueData() {
-		return String.format("%s,%8d", id, size);
+		return String.format("%s,%d", id, size);
 	}
 
 	@Override

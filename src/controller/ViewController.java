@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import javafx.application.Application;
 import model.Process;
+import view.FXMLFix;
+import view.MemoryManagerPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.MemoryManager;
-import view.MemoryManagerPane;
 
 /**
  * @author Peter Vukas
@@ -23,22 +23,28 @@ public class ViewController extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader f = MemoryManagerPane.constructable();
-		MemoryManagerPane mmp = f.getController();
-		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove(), new HandleProcessSelected());
-		Scene scene = new Scene(mmp);
+		FXMLFix f = new FXMLFix();
+		mmp = f.controller();
+		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove(), new HandleProcessSelected(););
+		Scene scene = new Scene(f.getPane());
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		mm = new MemoryManager(2000000);
+		mm = new MemoryManager(20000);
 		mmp.refreshMemoryDisplay(mm.exportDiagramData());
 		mmp.setWaitingQueue(mm.exportWaitingQueueData());
 
 		availableProcesses = new ArrayList<Process>();
-		for (int i = 0; i < mmp.numberOfProcesses(); i++) {
-			availableProcesses.add(new Process(0, (String.format("Process %2d", i + 1))));
+		for (int i = 0; i < 10; i++) {
+			availableProcesses.add(new Process(0, (String.format("Process %d", i + 1))));
 		}
 		availableProcesses.sort(availableProcesses.get(0));
+		ArrayList<String> alan = new ArrayList<String>();
+		for(Process p: availableProcesses) {
+			alan.add(p.associatedName);
+		}
+		
+		mmp.populateProcessList(alan);
 	}
 
 	private Process findProcess(String associatedName) {
@@ -70,6 +76,7 @@ public class ViewController extends Application {
 							hasNoError = false;
 							errorMessage = "Process is already in memory";
 						} else {
+							p.setSize(Integer.valueOf(mmp.getProcessSize()));
 							if (mmp.selectedAlgorithm().equals("First Fit")) {
 								hasNoError = mm.addFirstFit(p);
 								errorMessage = "This process is too large to be added to memory.\nIt has been added to the waiting queue";

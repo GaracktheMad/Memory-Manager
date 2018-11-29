@@ -211,8 +211,10 @@ public class MemoryManager {
 	 */
 	public ArrayList<String> exportDiagramData() {
 		ArrayList<String> exporter = new ArrayList<String>();
+		memory.sort(memory.get(0));
 		for (MemBlock mb : memory) {
 			exporter.add(mb.getDiagramData());
+			System.out.println(mb.getDiagramData());
 		}
 		return exporter;
 	}

@@ -22,6 +22,6 @@ public class EmptySpace extends MemBlock {
 	 */
 	@Override
 	public String getDiagramData() {
-		return String.format("Empty Space,%8d,%8d", address, size);
+		return String.format("Empty Space,%d,%d", address, size);
 	}
 }

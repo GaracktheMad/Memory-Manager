@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -43,14 +42,6 @@ public class MemoryManagerPane extends BorderPane {
 	@FXML
 	private VBox waitList;
 
-	/**
-	 * Creates an FXML loader of the Manager.FXML
-	 * 
-	 * @return The created loader
-	 */
-	public static FXMLLoader constructable() {
-		return new FXMLLoader(MemoryManagerPane.class.getResource("Manager.fxml"));
-	}
 
 	@FXML
 	void initialize() {
@@ -65,7 +56,7 @@ public class MemoryManagerPane extends BorderPane {
 		algorithmCmbBox.getItems().add("First Fit");
 		algorithmCmbBox.getItems().add("Best Fit");
 		algorithmCmbBox.getItems().add("Worst Fit");
-		populateProcessList(10);
+		pcmbBox.getItems().add("Dummy");
 	}
 
 	/**
@@ -190,20 +181,20 @@ public class MemoryManagerPane extends BorderPane {
 		BorderPane bp = new BorderPane();
 		StackPane sp = new StackPane();
 		Rectangle visual = new Rectangle();
-		visual.setWidth(20);
-		visual.setHeight(Integer.parseInt(tokens[2]));
+		visual.setWidth(100);
+		visual.setHeight(Integer.valueOf(tokens[2].trim()));
 		visual.setStroke(Color.BLACK);
 		if(tokens[0] != "Empty Space") {
 			visual.setFill(Color.SILVER);
 			sp.getChildren().addAll(visual, new Text(tokens[0]));
 		}
 		else {
-			visual.setFill(null);
+			visual.setFill(Color.GOLD);
 			sp.getChildren().add(visual);
 		}
 		bp.setCenter(sp);
-		Text address = new Text(tokens[0]);
-		bp.setTop(address);
+		Text address = new Text(tokens[1]);
+		bp.setLeft(address);
 		BorderPane.setAlignment(address, Pos.TOP_LEFT);
 		return bp;
 	}
@@ -212,12 +203,12 @@ public class MemoryManagerPane extends BorderPane {
 	 * Fills the list combo box with processes using the auto generated names
 	 * "Process #" where the # is their index + 1
 	 * 
-	 * @param number Number of processes to populate the list with
+	 * @param alan Array List of all associated names to be added
 	 */
-	public void populateProcessList(int number) {
+	public void populateProcessList(ArrayList<String> alan) {
 		pcmbBox.getItems().clear();
-		for (int i = 0; i < number; i++) {
-			pcmbBox.getItems().add(String.format("Process %2d", i + 1));
+		for (String s: alan) {
+			pcmbBox.getItems().add(s);
 		}
 	}
 
@@ -227,7 +218,7 @@ public class MemoryManagerPane extends BorderPane {
 	 * @return The currently selected process
 	 */
 	public String selectedProcess() {
-		return pcmbBox.getValue();
+		return pcmbBox.getValue().trim();
 	}
 
 	/**
@@ -258,6 +249,6 @@ public class MemoryManagerPane extends BorderPane {
 	 * @throws NumberFormatException Thrown if an invalid value is given
 	 */
 	public int getProcessSize() throws NumberFormatException {
-		return Math.abs(Integer.valueOf(sizeBox.getText()));
+		return Math.abs(Integer.valueOf(sizeBox.getText().trim()));
 	}
 }

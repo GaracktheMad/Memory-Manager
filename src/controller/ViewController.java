@@ -25,7 +25,7 @@ public class ViewController extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		FXMLFix f = new FXMLFix();
 		mmp = f.controller();
-		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove(), new HandleProcessSelected(););
+		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove(), new HandleProcessSelected());
 		Scene scene = new Scene(f.getPane());
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -103,6 +103,8 @@ public class ViewController extends Application {
 				mmp.hideAlert();
 				mmp.refreshMemoryDisplay(mm.exportDiagramData());
 				mmp.setWaitingQueue(mm.exportWaitingQueueData());
+				mmp.setDisableAddBtn(true);
+				mmp.setDisableRemoveBtn(false);
 			}
 		}
 
@@ -144,6 +146,8 @@ public class ViewController extends Application {
 					mmp.hideAlert();
 					mmp.refreshMemoryDisplay(mm.exportDiagramData());
 					mmp.setWaitingQueue(mm.exportWaitingQueueData());
+					mmp.setDisableAddBtn(false);
+					mmp.setDisableRemoveBtn(true);
 				}
 			}
 		}

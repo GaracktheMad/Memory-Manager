@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * The class which holds and manages the simulated memory
@@ -96,6 +97,7 @@ public class MemoryManager {
 					return true;
 				} else if (mb.getSize() == p.getSize()) {
 					p.setAddress(mb.getAddress());
+					memory.remove(mb);
 					memory.add(p);
 					memory.sort(p);
 					p.inMemory = true;
@@ -185,24 +187,24 @@ public class MemoryManager {
 	 * @author Peter Vukas
 	 */
 	public void compactAddQueue() {
-		for (int i = 0; i < memory.size(); i++) {
-			if (i + 1 < memory.size()) {
+		for (int i = 0; i < memory.size() - 1; i++) {
 				if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof EmptySpace) {
-					memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize()); // Combines 2 separate
-																									// Empty Spaces into
-																									// 1
+					// Combine 2 separate Empty Spaces into 1
+					memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize());
 					memory.remove(i + 1);
 					--i;
 				} else if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof Process) {
-					int temp; // Swaps the location of a Process and Empty Space, forcing empty space further
+					/*int temp; // Swaps the location of a Process and Empty Space, forcing empty space further
 								// down the list.
 					temp = memory.get(i).getAddress();
-					memory.get(i).setAddress(memory.get(i + 1).getAddress());
-					memory.get(i + 1).setAddress(temp);
+					memory.get(i).setAddress(memory.get(i + 1).getAddress());*/
+					memory.get(i + 1).setAddress(memory.get(i).getAddress());
+					memory.get(i).setAddress(memory.get(i + 1).getAddress() + 
+							memory.get(i + 1).getSize());
+					Collections.swap(memory, i, i + 1);
 				}
 			}
 		}
-	}
 
 	/**
 	 * @author Peter Vukas

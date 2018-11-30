@@ -184,7 +184,7 @@ public class MemoryManagerPane extends BorderPane {
 		visual.setWidth(100);
 		visual.setHeight(Integer.valueOf(tokens[2].trim()));
 		visual.setStroke(Color.BLACK);
-		if(tokens[0] != "Empty Space") {
+		if(tokens[0].trim() != "Empty Space") {
 			visual.setFill(Color.SILVER);
 			sp.getChildren().addAll(visual, new Text(tokens[0]));
 		}

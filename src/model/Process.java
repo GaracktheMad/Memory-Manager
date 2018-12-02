@@ -35,4 +35,20 @@ public class Process extends MemBlock {
 	public boolean isInMemory() {
 		return inMemory;
 	}
+	
+	/* (non-Javadoc)
+	 * @see model.MemBlock#getDiagramData()
+	 */
+	@Override
+	public String getDiagramData() {
+		return String.format("%s,%d,%d", associatedName, address, size);
+	}
+	
+	/* (non-Javadoc)
+	 * @see model.MemBlock#getDiagramData()
+	 */
+	@Override
+	public String getWaitingQueueData() {
+		return String.format("%s,%d", associatedName, size);
+	}
 }

@@ -59,6 +59,15 @@ public class MemoryManager {
 			}
 		}
 		if (index < 0) {
+			if(waitingQueue.size() > 0) {
+				for(Process p2: waitingQueue) {
+					if(p2.getId() == p.getId()) {
+						waitingQueue.remove(p2);
+						waitingQueue.add(p);
+						return false;
+					}
+				}
+			}
 			waitingQueue.add(p);
 			return false;
 		} else {
@@ -109,6 +118,15 @@ public class MemoryManager {
 				}
 			}
 		}
+		if(waitingQueue.size() > 0) {
+			for(Process p2: waitingQueue) {
+				if(p2.getId() == p.getId()) {
+					waitingQueue.remove(p2);
+					waitingQueue.add(p);
+					return false;
+				}
+			}
+		}
 		waitingQueue.add(p);
 		return false;
 	}
@@ -137,6 +155,15 @@ public class MemoryManager {
 			}
 		}
 		if (index < 0) {
+			if(waitingQueue.size() > 0) {
+				for(Process p2: waitingQueue) {
+					if(p2.getId() == p.getId()) {
+						waitingQueue.remove(p2);
+						waitingQueue.add(p);
+						return false;
+					}
+				}
+			}
 			waitingQueue.add(p);
 			return false;
 		} else {
@@ -168,17 +195,17 @@ public class MemoryManager {
 			for (MemBlock mb : memory) {
 				if (mb.getId().equals(id)) {
 					int i = memory.indexOf(mb);
-					if (memory.size() != (i + 1) && memory.get(i + 1) instanceof EmptySpace) {
+					/*if (memory.size() != (i + 1) && memory.get(i + 1) instanceof EmptySpace) {
 						EmptySpace e = (EmptySpace) memory.get(i + 1);
 						e.setAddress(mb.getAddress());
 						e.setSize(e.getSize() + mb.getSize());
 						memory.remove(mb);
-					} else {
+					} else {*/
 						EmptySpace e = new EmptySpace(mb.getSize(), mb.getAddress());
 						memory.remove(mb);
 						memory.add(e);
 						memory.sort(e);
-					}
+					//}
 					Process p = (Process) mb;
 					p.inMemory = false;
 					return true;
@@ -197,7 +224,7 @@ public class MemoryManager {
 	/**
 	 * Compacts empty space Attempts to add processes from waiting queue
 	 * 
-	 * @author Peter Vukas
+	 * @author Peter Vukas and Brandon Ruiz
 	 */
 	public void compactAddQueue() {
 		for (int i = 0; i < memory.size() - 1; i++) {
@@ -217,6 +244,36 @@ public class MemoryManager {
 				Collections.swap(memory, i, i + 1);
 			}
 		}
+		
+		while(waitingQueue.size() > 0) {
+			Process p = waitingQueue.get(0);
+			for (MemBlock mb : memory) {
+				if (mb instanceof EmptySpace == true) {
+					if (mb.getSize() > p.getSize()) {
+						p.setAddress(mb.getAddress());
+						mb.setAddress(p.getAddress() + p.getSize());
+						mb.setSize(mb.getSize() - p.getSize());
+						memory.add(p);
+						waitingQueue.remove(p);
+						memory.sort(p);
+						p.inMemory = true;
+						p = null;
+						break;
+					} else if (mb.getSize() == p.getSize()) {
+						p.setAddress(mb.getAddress());
+						memory.remove(mb);
+						memory.add(p);
+						memory.sort(p);
+						p.inMemory = true;
+						waitingQueue.remove(p);
+						p = null;
+						break;
+					}
+				}
+			}
+			if(p != null) break;
+		}
+		
 	}
 
 	/**

@@ -11,7 +11,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -25,37 +24,68 @@ public class MemoryManagerPane extends BorderPane {
 
 	@FXML
 	private VBox memVBox;
+
 	@FXML
 	private ComboBox<String> pcmbBox;
-	@FXML
-	private ComboBox<String> algorithmCmbBox;
-	@FXML
-	private Button addBtn;
-	@FXML
-	private Button compactionBtn;
-	@FXML
-	private Button removeBtn;
+
 	@FXML
 	private TextField sizeBox;
+
 	@FXML
-	private Label statusLbl;
+	private ComboBox<String> algorithmCmbBox;
+
+	@FXML
+	private Button addBtn;
+
+	@FXML
+	private Button compactionBtn;
+
+	@FXML
+	private Button removeBtn;
+
+	@FXML
+	private TextField currentSizeTxt;
+
+	@FXML
+	private Button resizeBtn;
+
+	@FXML
+	private ComboBox<Integer> sizesCmboBox;
+
+	@FXML
+	private Button clear;
+
 	@FXML
 	private VBox waitList;
 
+	@FXML
+	private Label statusLbl;
 
 	@FXML
 	void initialize() {
 		assert memVBox != null : "fx:id=\"memVBox\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert pcmbBox != null : "fx:id=\"pcmbBox\" was not injected: check your FXML file 'Manager.fxml'.";
+		assert sizeBox != null : "fx:id=\"sizeBox\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert algorithmCmbBox != null : "fx:id=\"algorithmCmbBox\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert addBtn != null : "fx:id=\"addBtn\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert compactionBtn != null : "fx:id=\"compactionBtn\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert removeBtn != null : "fx:id=\"removeBtn\" was not injected: check your FXML file 'Manager.fxml'.";
+		assert currentSizeTxt != null : "fx:id=\"currentSizeTxt\" was not injected: check your FXML file 'Manager.fxml'.";
+		assert resizeBtn != null : "fx:id=\"resizeBtn\" was not injected: check your FXML file 'Manager.fxml'.";
+		assert sizesCmboBox != null : "fx:id=\"sizesCmboBox\" was not injected: check your FXML file 'Manager.fxml'.";
+		assert clear != null : "fx:id=\"clear\" was not injected: check your FXML file 'Manager.fxml'.";
 		assert waitList != null : "fx:id=\"waitList\" was not injected: check your FXML file 'Manager.fxml'.";
-		
+		assert statusLbl != null : "fx:id=\"statusLbl\" was not injected: check your FXML file 'Manager.fxml'.";
+
 		algorithmCmbBox.getItems().add("First Fit");
 		algorithmCmbBox.getItems().add("Best Fit");
 		algorithmCmbBox.getItems().add("Worst Fit");
+		algorithmCmbBox.getSelectionModel().selectFirst();
+		for (int i = 7; i < 20; i++) {
+			sizesCmboBox.getItems().add((int) Math.pow(2, i));
+		}
+		sizesCmboBox.getSelectionModel().selectFirst();
+
 		pcmbBox.getItems().add("Dummy");
 	}
 
@@ -137,11 +167,14 @@ public class MemoryManagerPane extends BorderPane {
 	 *                      labeled "Remove" is clicked
 	 */
 	public void setOnActions(EventHandler<ActionEvent> handleRun, EventHandler<ActionEvent> handleCompact,
-			EventHandler<ActionEvent> handleRemove, EventHandler<ActionEvent> handleProcessSelected) {
+			EventHandler<ActionEvent> handleRemove, EventHandler<ActionEvent> handleProcessSelected,
+			EventHandler<ActionEvent> handleClear, EventHandler<ActionEvent> handleResize) {
 		addBtn.setOnAction(handleRun);
 		compactionBtn.setOnAction(handleCompact);
 		removeBtn.setOnAction(handleRemove);
 		pcmbBox.setOnAction(handleProcessSelected);
+		clear.setOnAction(handleClear);
+		resizeBtn.setOnAction(handleResize);
 	}
 
 	/**
@@ -156,20 +189,21 @@ public class MemoryManagerPane extends BorderPane {
 		for (String s : als) {
 			memVBox.getChildren().add(memoryBlock(s));
 		}
+		memVBox.setAlignment(Pos.CENTER);
 	}
-	
+
 	/**
 	 * Create waiting queue visuals
 	 */
-	
+
 	public void setWaitingQueue(ArrayList<String> processes) {
 		waitList.getChildren().clear();
 		waitList.getChildren().add(new Label("Waiting Queue"));
-		for(String s : processes) {
+		for (String s : processes) {
 			waitList.getChildren().add(new Label(s));
 		}
 	}
- 
+
 	/**
 	 * @param datum String of data to be contained in this memory block. The format
 	 *              is comma delimited in the order: "Name,StartAddress,Size"
@@ -179,23 +213,25 @@ public class MemoryManagerPane extends BorderPane {
 	private BorderPane memoryBlock(String datum) {
 		String[] tokens = datum.split(",");
 		BorderPane bp = new BorderPane();
-		StackPane sp = new StackPane();
 		Rectangle visual = new Rectangle();
 		visual.setWidth(100);
 		visual.setHeight(Integer.valueOf(tokens[2].trim()));
 		visual.setStroke(Color.BLACK);
-		if(tokens[0].trim() != "Empty Space") {
-			visual.setFill(Color.SILVER);
-			sp.getChildren().addAll(visual, new Text(tokens[0]));
+		if (!tokens[0].trim().equals("Empty Space")) {
+			visual.setFill(Color.CYAN);
+			bp.setCenter(visual);
+		} else {
+			visual.setFill(Color.GRAY);
+
 		}
-		else {
-			visual.setFill(Color.GOLD);
-			sp.getChildren().add(visual);
-		}
-		bp.setCenter(sp);
 		Text address = new Text(tokens[1]);
+		Text type = new Text(tokens[0]);
 		bp.setLeft(address);
-		BorderPane.setAlignment(address, Pos.TOP_LEFT);
+		bp.setCenter(visual);
+		bp.setRight(type);
+		BorderPane.setAlignment(address, Pos.TOP_CENTER);
+		BorderPane.setAlignment(type, Pos.TOP_CENTER);
+		BorderPane.setAlignment(visual, Pos.CENTER);
 		return bp;
 	}
 
@@ -207,9 +243,10 @@ public class MemoryManagerPane extends BorderPane {
 	 */
 	public void populateProcessList(ArrayList<String> alan) {
 		pcmbBox.getItems().clear();
-		for (String s: alan) {
+		for (String s : alan) {
 			pcmbBox.getItems().add(s);
 		}
+		pcmbBox.getSelectionModel().selectFirst();
 	}
 
 	/**
@@ -250,5 +287,24 @@ public class MemoryManagerPane extends BorderPane {
 	 */
 	public int getProcessSize() throws NumberFormatException {
 		return Math.abs(Integer.valueOf(sizeBox.getText().trim()));
+	}
+
+	/**
+	 * Gets the integer value of memory the user would like. All values are powers
+	 * of 2 starting at 64.
+	 * 
+	 * @return Integer value selected by the user
+	 */
+	public int resizeMemoryValue() {
+		return sizesCmboBox.getValue();
+	}
+
+	/**
+	 * Displays to the user the size of memory.
+	 * 
+	 * @param size Integer size of memory
+	 */
+	public void currentSize(int size) {
+		currentSizeTxt.setText(String.format("Memory Size: %dK", size));
 	}
 }

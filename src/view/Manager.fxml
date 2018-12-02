@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root prefHeight="425.0" prefWidth="359.0" type="BorderPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MemoryManagerPane">
+<fx:root prefHeight="425.0" prefWidth="359.0" type="BorderPane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MemoryManagerPane">
    <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </BorderPane.margin></VBox>
       <ScrollPane BorderPane.alignment="CENTER">
          <content>
             <VBox fx:id="memVBox" prefHeight="410.0" prefWidth="229.0" />
@@ -47,7 +46,27 @@
                   <Button fx:id="removeBtn" mnemonicParsing="false" text="Remove" />
                </children>
             </HBox>
-            <VBox fx:id="waitList" prefHeight="200.0" prefWidth="100.0" />
+            <TextField fx:id="currentSizeTxt" editable="false" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="resizeBtn" mnemonicParsing="false" text="Resize Memory" wrapText="true">
+                     <tooltip>
+                        <Tooltip text="WARNING: RESETS ALL DATA. THIS CANNOT BE REVERSED. USE WITH EXTREME CAUTION" wrapText="true" />
+                     </tooltip>
+                  </Button>
+                  <ComboBox fx:id="sizesCmboBox" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <Button fx:id="clear" alignment="CENTER" mnemonicParsing="false" text="Clear All">
+               <tooltip>
+                  <Tooltip text="WARNING: RESETS ALL DATA AND RESETS MEMORY TO THE DEFAULT SIZE. THIS CANNOT BE REVERSED. USE WITH EXTREME CAUTION" wrapText="true" />
+               </tooltip>
+            </Button>
+            <ScrollPane>
+               <content>
+                  <VBox fx:id="waitList" prefHeight="200.0" prefWidth="100.0" />
+               </content>
+            </ScrollPane>
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
@@ -55,7 +74,7 @@
       </VBox>
    </center>
    <bottom>
-      <Label fx:id="statusLbl" contentDisplay="CENTER" prefHeight="22.0" prefWidth="446.0" text="Status" textAlignment="CENTER" textFill="RED" underline="true" visible="false" wrapText="true" BorderPane.alignment="CENTER">
+      <Label fx:id="statusLbl" contentDisplay="CENTER" text="Status" textAlignment="CENTER" textFill="RED" textOverrun="CLIP" underline="true" visible="false" wrapText="true" BorderPane.alignment="CENTER">
          <font>
             <Font name="Arial Bold" size="18.0" />
          </font></Label>

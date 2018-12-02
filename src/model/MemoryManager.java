@@ -19,7 +19,11 @@ public class MemoryManager {
 	/**
 	 * The waiting queue
 	 */
-	private ArrayList<Process> waitingQueue; // TODO Add waiting queue logic
+	private ArrayList<Process> waitingQueue;
+	/**
+	 * The size (KB) of memory
+	 */
+	public final int size;
 
 	/**
 	 * Class constructor
@@ -28,10 +32,7 @@ public class MemoryManager {
 		memory = new ArrayList<MemBlock>();
 		waitingQueue = new ArrayList<Process>();
 		memory.add(new EmptySpace(memorySize, 0));
-		/**
-		 * To be added - the initial memory diagram - the initial memory space - the
-		 * assumed size of memory, for all diagram box creation
-		 */
+		size = memorySize;
 	}
 
 	/**
@@ -72,6 +73,7 @@ public class MemoryManager {
 			memory.add(p);
 			memory.sort(p);
 			p.inMemory = true;
+			waitingQueue.remove(p);
 			return true;
 		}
 	}
@@ -92,6 +94,7 @@ public class MemoryManager {
 					mb.setAddress(p.getAddress() + p.getSize());
 					mb.setSize(mb.getSize() - p.getSize());
 					memory.add(p);
+					waitingQueue.remove(p);
 					memory.sort(p);
 					p.inMemory = true;
 					return true;
@@ -101,6 +104,7 @@ public class MemoryManager {
 					memory.add(p);
 					memory.sort(p);
 					p.inMemory = true;
+					waitingQueue.remove(p);
 					return true;
 				}
 			}
@@ -147,6 +151,7 @@ public class MemoryManager {
 			memory.add(p);
 			memory.sort(p);
 			p.inMemory = true;
+			waitingQueue.remove(p);
 			return true;
 		}
 	}
@@ -162,10 +167,18 @@ public class MemoryManager {
 		if (id.substring(0, 1).equals("P")) {
 			for (MemBlock mb : memory) {
 				if (mb.getId().equals(id)) {
-					EmptySpace e = new EmptySpace(mb.getSize(), mb.getAddress());
-					memory.remove(mb);
-					memory.add(e);
-					memory.sort(e);
+					int i = memory.indexOf(mb);
+					if (memory.size() != (i + 1) && memory.get(i + 1) instanceof EmptySpace) {
+						EmptySpace e = (EmptySpace) memory.get(i + 1);
+						e.setAddress(mb.getAddress());
+						e.setSize(e.getSize() + mb.getSize());
+						memory.remove(mb);
+					} else {
+						EmptySpace e = new EmptySpace(mb.getSize(), mb.getAddress());
+						memory.remove(mb);
+						memory.add(e);
+						memory.sort(e);
+					}
 					Process p = (Process) mb;
 					p.inMemory = false;
 					return true;
@@ -188,23 +201,23 @@ public class MemoryManager {
 	 */
 	public void compactAddQueue() {
 		for (int i = 0; i < memory.size() - 1; i++) {
-				if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof EmptySpace) {
-					// Combine 2 separate Empty Spaces into 1
-					memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize());
-					memory.remove(i + 1);
-					--i;
-				} else if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof Process) {
-					/*int temp; // Swaps the location of a Process and Empty Space, forcing empty space further
-								// down the list.
-					temp = memory.get(i).getAddress();
-					memory.get(i).setAddress(memory.get(i + 1).getAddress());*/
-					memory.get(i + 1).setAddress(memory.get(i).getAddress());
-					memory.get(i).setAddress(memory.get(i + 1).getAddress() + 
-							memory.get(i + 1).getSize());
-					Collections.swap(memory, i, i + 1);
-				}
+			if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof EmptySpace) {
+				// Combine 2 separate Empty Spaces into 1
+				memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize());
+				memory.remove(i + 1);
+				--i;
+			} else if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof Process) {
+				/*
+				 * int temp; // Swaps the location of a Process and Empty Space, forcing empty
+				 * space further // down the list. temp = memory.get(i).getAddress();
+				 * memory.get(i).setAddress(memory.get(i + 1).getAddress());
+				 */
+				memory.get(i + 1).setAddress(memory.get(i).getAddress());
+				memory.get(i).setAddress(memory.get(i + 1).getAddress() + memory.get(i + 1).getSize());
+				Collections.swap(memory, i, i + 1);
 			}
 		}
+	}
 
 	/**
 	 * @author Peter Vukas
@@ -216,21 +229,20 @@ public class MemoryManager {
 		memory.sort(memory.get(0));
 		for (MemBlock mb : memory) {
 			exporter.add(mb.getDiagramData());
-			System.out.println(mb.getDiagramData());
 		}
 		return exporter;
 	}
-	
+
 	/**
 	 * Exports list of data for the waiting queue
 	 * 
-	 * @return String ArrayList of the name and id of all processes in the 
-	 * waiting queue
+	 * @return String ArrayList of the name and id of all processes in the waiting
+	 *         queue
 	 * @author Brandon Ruiz
 	 */
 	public ArrayList<String> exportWaitingQueueData() {
 		ArrayList<String> waitingInfo = new ArrayList<String>();
-		for(Process p : waitingQueue) {
+		for (Process p : waitingQueue) {
 			waitingInfo.add(p.getWaitingQueueData());
 		}
 		return waitingInfo;

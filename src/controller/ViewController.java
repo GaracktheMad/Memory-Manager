@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javafx.application.Application;
 import model.Process;
-import view.FXMLFix;
+import view.FXMLHelper;
 import view.MemoryManagerPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,7 +35,7 @@ public class ViewController extends Application {
 	 * The initially passed stage value.
 	 */
 	private Stage ps;
-	private final int DEFAULT_MEMORY_SIZE = 20000; 
+	private final int DEFAULT_MEMORY_SIZE = 20000;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -44,8 +44,8 @@ public class ViewController extends Application {
 	}
 
 	private void reset(Stage primaryStage, int memorySize) throws Exception {
-		FXMLFix f = new FXMLFix();
-		mmp = f.controller();
+		FXMLHelper f = new FXMLHelper();
+		mmp = f.getController();
 		mmp.setOnActions(new HandleRun(), new HandleCompact(), new HandleRemove(), new HandleProcessSelected(),
 				new HandleClear(), new HandleResize());
 		Scene scene = new Scene(f.getPane());

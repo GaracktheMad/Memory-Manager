@@ -9,6 +9,9 @@ import java.util.Comparator;
  *
  */
 public abstract class MemBlock implements Comparator<MemBlock> {
+	/**
+	 * Counts the instances of this class to aid in identifier generation
+	 */
 	protected static int idCounter = 0;
 
 	/**
@@ -56,7 +59,7 @@ public abstract class MemBlock implements Comparator<MemBlock> {
 	/**
 	 * Address setter
 	 * 
-	 * @param size new address
+	 * @param address new address
 	 */
 	public void setAddress(int address) {
 		this.address = address;

@@ -159,12 +159,18 @@ public class MemoryManagerPane extends BorderPane {
 	/**
 	 * Adds action events to the three buttons displayed on this pane.
 	 * 
-	 * @param handleRun     Action event which will be performed when the button
-	 *                      labeled "Add" is clicked
-	 * @param handleCompact Action event which will be performed when the button
-	 *                      labeled "Compact" is clicked
-	 * @param handleRemove  Action event which will be performed when the button
-	 *                      labeled "Remove" is clicked
+	 * @param handleRun             Action event which will be performed when the
+	 *                              button labeled "Add" is clicked
+	 * @param handleCompact         Action event which will be performed when the
+	 *                              button labeled "Compact" is clicked
+	 * @param handleRemove          Action event which will be performed when the
+	 *                              button labeled "Remove" is clicked
+	 * @param handleProcessSelected Action event which will be performed when a new
+	 *                              Process is selected from the process combo box
+	 * @param handleClear           Action event which will be performed when the
+	 *                              button labeled "Clear All" is clicked
+	 * @param handleResize          Action event which will be performed when the
+	 *                              button labeled "Resize" is clicked
 	 */
 	public void setOnActions(EventHandler<ActionEvent> handleRun, EventHandler<ActionEvent> handleCompact,
 			EventHandler<ActionEvent> handleRemove, EventHandler<ActionEvent> handleProcessSelected,
@@ -194,6 +200,9 @@ public class MemoryManagerPane extends BorderPane {
 
 	/**
 	 * Create waiting queue visuals
+	 * 
+	 * @param processes An array of Strings formatted in CSV containing relevant
+	 *                  data of a process.
 	 */
 
 	public void setWaitingQueue(ArrayList<String> processes) {

@@ -2,13 +2,14 @@ package model;
 
 /**
  * Denotes an empty space in memory which can be replaced by a process.
+ * 
  * @author Peter Vukas
  *
  */
 public class EmptySpace extends MemBlock {
 
 	/**
-	 * @param size Size of the space
+	 * @param size    Size of the space
 	 * @param address Base address
 	 */
 	public EmptySpace(int size, int address) {
@@ -17,7 +18,9 @@ public class EmptySpace extends MemBlock {
 		id = String.format("E%d", idCounter++);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see model.MemBlock#getDiagramData()
 	 */
 	@Override

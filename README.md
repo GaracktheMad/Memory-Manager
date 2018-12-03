@@ -6,7 +6,7 @@
 3. Click the add button.
   * Processes added successfully will be displayed on the memory panel.
   * Unsuccessful processes will either display an error, or will appear on the waiting queue.
-  * The process will disappear from the waiting queue when added to memory successfully.
+  * The process will disappear from the waiting queue when added to memory successfully or when compaction is requested and space is available.
 
 ### Removing Processes:
 1. Select a Process already in memory. This will display the size of the process and enable the remove button.
@@ -28,4 +28,4 @@
   * This issue occurs due to the labels attached to the rectangle.
   * An empty space has a gray color and a process has a cyan color to compensate. All of the colored rectangles should meet but may not due to java problems with small sizes.
 ### Bugs/Faults:
-At present, there are no bugs or quirks.
+At present, there are no bugs or faults.

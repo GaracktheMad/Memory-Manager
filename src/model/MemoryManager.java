@@ -27,6 +27,9 @@ public class MemoryManager {
 
 	/**
 	 * Class constructor
+	 * 
+	 * @param memorySize Integer value of the maximum number of space this memory
+	 *                   manager will handle. Cannot be changed.
 	 */
 	public MemoryManager(int memorySize) {
 		memory = new ArrayList<MemBlock>();
@@ -59,9 +62,9 @@ public class MemoryManager {
 			}
 		}
 		if (index < 0) {
-			if(waitingQueue.size() > 0) {
-				for(Process p2: waitingQueue) {
-					if(p2.getId() == p.getId()) {
+			if (waitingQueue.size() > 0) {
+				for (Process p2 : waitingQueue) {
+					if (p2.getId() == p.getId()) {
 						waitingQueue.remove(p2);
 						waitingQueue.add(p);
 						return false;
@@ -118,9 +121,9 @@ public class MemoryManager {
 				}
 			}
 		}
-		if(waitingQueue.size() > 0) {
-			for(Process p2: waitingQueue) {
-				if(p2.getId() == p.getId()) {
+		if (waitingQueue.size() > 0) {
+			for (Process p2 : waitingQueue) {
+				if (p2.getId() == p.getId()) {
 					waitingQueue.remove(p2);
 					waitingQueue.add(p);
 					return false;
@@ -155,9 +158,9 @@ public class MemoryManager {
 			}
 		}
 		if (index < 0) {
-			if(waitingQueue.size() > 0) {
-				for(Process p2: waitingQueue) {
-					if(p2.getId() == p.getId()) {
+			if (waitingQueue.size() > 0) {
+				for (Process p2 : waitingQueue) {
+					if (p2.getId() == p.getId()) {
 						waitingQueue.remove(p2);
 						waitingQueue.add(p);
 						return false;
@@ -194,26 +197,34 @@ public class MemoryManager {
 		if (id.substring(0, 1).equals("P")) {
 			for (MemBlock mb : memory) {
 				if (mb.getId().equals(id)) {
-					int i = memory.indexOf(mb);
-					/*if (memory.size() != (i + 1) && memory.get(i + 1) instanceof EmptySpace) {
-						EmptySpace e = (EmptySpace) memory.get(i + 1);
-						e.setAddress(mb.getAddress());
-						e.setSize(e.getSize() + mb.getSize());
-						memory.remove(mb);
-					} else {*/
-						EmptySpace e = new EmptySpace(mb.getSize(), mb.getAddress());
-						memory.remove(mb);
-						memory.add(e);
-						memory.sort(e);
-					//}
+					EmptySpace e = new EmptySpace(mb.getSize(), mb.getAddress());
+					memory.remove(mb);
+					memory.add(e);
+					memory.sort(e);
 					Process p = (Process) mb;
 					p.inMemory = false;
+					for (int i = 0; i < memory.size() - 1; i++) {
+						if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof EmptySpace) {
+							// Combine 2 separate Empty Spaces into 1
+							memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize());
+							memory.remove(i + 1);
+							--i;
+						}
+					}
 					return true;
 				}
 			}
 			for (Process p : waitingQueue) {
 				if (p.getId() == id) {
 					waitingQueue.remove(p);
+					for (int i = 0; i < memory.size() - 1; i++) {
+						if (memory.get(i) instanceof EmptySpace && memory.get(i + 1) instanceof EmptySpace) {
+							// Combine 2 separate Empty Spaces into 1
+							memory.get(i).setSize(memory.get(i + 1).getSize() + memory.get(i).getSize());
+							memory.remove(i + 1);
+							--i;
+						}
+					}
 					return true;
 				}
 			}
@@ -222,7 +233,7 @@ public class MemoryManager {
 	}
 
 	/**
-	 * Compacts empty space Attempts to add processes from waiting queue
+	 * Compacts empty space. Attempts to add processes from waiting queue
 	 * 
 	 * @author Peter Vukas and Brandon Ruiz
 	 */
@@ -244,8 +255,8 @@ public class MemoryManager {
 				Collections.swap(memory, i, i + 1);
 			}
 		}
-		
-		while(waitingQueue.size() > 0) {
+
+		while (waitingQueue.size() > 0) {
 			Process p = waitingQueue.get(0);
 			for (MemBlock mb : memory) {
 				if (mb instanceof EmptySpace == true) {
@@ -271,9 +282,10 @@ public class MemoryManager {
 					}
 				}
 			}
-			if(p != null) break;
+			if (p != null)
+				break;
 		}
-		
+
 	}
 
 	/**
